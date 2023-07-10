@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context">
+
+    <bean class="io.github.fairyspace.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+    <bean id="pointcutAdvisor" class="io.github.fairyspace.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* io.github.fairyspace.test.bean.Wife.*(..))"/>
+        <property name="advice" ref="methodInterceptor"/>
+    </bean>
+
+    <bean id="methodInterceptor" class="io.github.fairyspace.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+
+    <bean id="beforeAdvice" class="io.github.fairyspace.test.bean.SpouseAdvice"/>
+
+
+    <bean id="husband" class="io.github.fairyspace.test.bean.Husband">
+        <property name="wife" ref="wife"/>
+    </bean>
+
+    <bean id="wife" class="io.github.fairyspace.test.bean.Wife">
+        <property name="husband" ref="husband"/>
+    </bean>
+
+</beans>
